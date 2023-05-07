@@ -1,0 +1,20 @@
+name: tfsec
+on: [pull_request]
+jobs:
+  tfsec:
+    name: runner / tfsec
+    runs-on: ubuntu-latest # Windows and macOS are also supported
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3
+
+      - name: Run tfsec with reviewdog output on the PR
+        uses: reviewdog/action-tfsec@master
+        with:
+          github_token: ${{ secrets.REVIEWDOG_TOKEN }}
+          level: info # Get more output from reviewdog
+          filter_mode: nofilter # Check all files, not just the diff
+          fail_on_error: true # Fail action if errors are found
+          flags: -tee # Add debug flag to reviewdog
+          tfsec_flags: "" # Optional
